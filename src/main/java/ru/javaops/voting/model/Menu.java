@@ -8,17 +8,21 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
-@Table(name = "restoration")
+@Table(name = "menu")
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Restoration extends NamedEntity {
+public class Menu extends BaseEntity {
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @Column(name = "date")
+    private LocalDate date;
+
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "dish_id")
     @OnDelete(action = OnDeleteAction.CASCADE) //https://stackoverflow.com/a/44988100/548473
-    @JoinColumn(name = "restoration_id")
-    private List<Menu> menus;
+    private List<Dish> dishes;
 }

@@ -12,46 +12,44 @@ import ru.javaops.voting.service.RestorationService;
 import java.net.URI;
 import java.util.List;
 
-import static ru.javaops.voting.web.RestorationController.RESTORATION_URL;
-
 @RestController
-@RequestMapping(RESTORATION_URL)
 @AllArgsConstructor
 public class RestorationController {
 
-    static final String RESTORATION_URL = "/restorations";
+    private final String URL_ADMIN = "admin/restorations";
+    private final String URL_PROFILE = "profile/restorations";
 
     private RestorationService service;
 
-    @GetMapping
+    @GetMapping(URL_PROFILE)
     public List<Restoration> getAll() {
         return service.getAll();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(URL_PROFILE + "/{id}")
     public Restoration get(@PathVariable int id) {
         return service.get(id);
     }
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = URL_ADMIN, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Restoration> createWithLocation(@RequestBody Restoration restoration) {
         Restoration created = service.save(restoration);
 
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path(RESTORATION_URL + "/{id}")
+                .path(URL_PROFILE + "/{id}")
                 .buildAndExpand(created.getId()).toUri();
 
         return ResponseEntity.created(uriOfNewResource).body(created);
     }
 
-    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = URL_ADMIN + "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@RequestBody Restoration restoration, @PathVariable int id) {
         restoration.setId(id);
         service.update(restoration);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping(URL_ADMIN + "/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable int id) {
         service.delete(id);
