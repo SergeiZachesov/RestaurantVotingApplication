@@ -11,9 +11,6 @@ import java.util.List;
 
 public interface DishRepository extends JpaRepository<Dish, Integer> {
 
-    @Query("SELECT d FROM Dish d WHERE d.restoration.id=:restorationId")
-    List<Dish> getAllByRestoration(@Param("restorationId") Integer restorationId);
-
     @Transactional
     @Modifying
     @Query("DELETE FROM Dish d WHERE d.id=:id")

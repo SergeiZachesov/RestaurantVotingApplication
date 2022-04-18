@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.javaops.voting.model.Dish;
@@ -13,20 +12,20 @@ import ru.javaops.voting.service.DishService;
 import java.net.URI;
 import java.util.List;
 
-import static ru.javaops.voting.web.DishController.DISH_URL;
+import static ru.javaops.voting.web.DishController.URL;
 
 @RestController
-@RequestMapping(DISH_URL)
+@RequestMapping(URL)
 @AllArgsConstructor
 public class DishController {
 
-    static final String DISH_URL = "/dish";
+    static final String URL = "admin/dishes";
 
     private DishService service;
 
     @GetMapping
-    public List<Dish> getAllByRestoration(@RequestParam @Nullable Integer restorationId) {
-        return service.getAllByRestoration(restorationId);
+    public List<Dish> getAll() {
+        return service.getAll();
     }
 
     @GetMapping("/{id}")
@@ -45,7 +44,7 @@ public class DishController {
         Dish created = service.save(dish);
 
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path(DISH_URL + "/{id}")
+                .path(URL + "/{id}")
                 .buildAndExpand(created.getId()).toUri();
 
         return ResponseEntity.created(uriOfNewResource).body(created);

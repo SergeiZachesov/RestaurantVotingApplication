@@ -20,10 +20,4 @@ public class Dish extends NamedEntity implements HasId {
 
     @Column(name = "price")
     private Double price;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "restoration_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonBackReference
-    private Restoration restoration;
 }
